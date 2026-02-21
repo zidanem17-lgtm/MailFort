@@ -1,0 +1,10 @@
+[
+  {
+    "message_id": "12345",
+    "sender": "attacker@example.com",
+    "subject": "Urgent: Verify your account",
+    "score": 85,
+    "reasons": ["SPF failure", "Phishing language indicators", "High-entropy attachment"],
+    "findings": {}
+  }
+]
