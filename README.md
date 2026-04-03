@@ -1,4 +1,4 @@
-# MailFort — Gmail Threat Scanner and Mitigation Engine
+# MailFort — Email Threat Scanner and Mitigation Engine
 
 MailFort is a modular Gmail analysis tool focused on read-only-first scanning, explainable threat scoring, and user-approved mitigation.
 
