@@ -1,1 +1,29 @@
+# MailFort v2 dependencies
+
+# CLI
 click>=8.1.0
+
+# Google / Gmail
+google-auth>=2.0.0
+google-auth-oauthlib>=1.0.0
+google-auth-httplib2>=0.1.0
+google-api-python-client>=2.80.0
+
+# Email parsing
+tldextract>=3.4.0
+
+# MIME detection (requires libmagic system library)
+python-magic>=0.4.27
+
+# Reporting
+pandas>=2.0.0
+jinja2>=3.1.0
+
+# Optional: office-document macro detection
+# olefile>=0.47
+
+# Optional: PDF analysis (supplement to byte-pattern checks)
+# PyMuPDF>=1.23.0
+
+# Optional: sandbox browser detonation
+# playwright>=1.40.0
