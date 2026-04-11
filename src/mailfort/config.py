@@ -20,14 +20,17 @@ SCORING_WEIGHTS = {
     "dmarc_fail": 20,
     # Header anomalies
     "reply_to_mismatch": 10,
-    "display_name_mismatch": 10,
+    "display_name_mismatch": 15,
     "suspicious_return_path": 8,
     "missing_message_id": 5,
     "received_chain_anomaly": 8,
+    "urgent_subject": 8,
+    "all_caps_subject": 5,
     # Sender signals
     "new_sender": 5,
     "lookalike_domain": 25,
     "brand_impersonation": 20,
+    "freemail_brand_impersonation": 22,
     # Body signals
     "phishing_language": 10,
     # URL signals
