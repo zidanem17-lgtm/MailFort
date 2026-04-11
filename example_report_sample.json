@@ -1,10 +1,396 @@
 [
   {
-    "message_id": "12345",
-    "sender": "attacker@example.com",
-    "subject": "Urgent: Verify your account",
-    "score": 85,
-    "reasons": ["SPF failure", "Phishing language indicators", "High-entropy attachment"],
-    "findings": {}
+    "case_ts": 1744372800.0,
+    "message": {
+      "message_id": "18e4a2f7b9c1d305",
+      "thread_id": "18e4a2f7b9c1d305",
+      "provider": "gmail",
+      "sender": "\"PayPal Security\" <security@paypa1-alerts.xyz>",
+      "sender_domain": "paypa1-alerts.xyz",
+      "subject": "URGENT: Your PayPal account has been limited",
+      "date": "Fri, 11 Apr 2026 08:14:32 +0000",
+      "labels": ["INBOX"],
+      "body_sha256": "a3f1c9e2d847b560f2e1a4c3d7b8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6",
+      "html_sha256": "b4e2d0f3c958a671f3f2b5d4e8c9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7",
+      "attachment_count": 1
+    },
+    "static_analysis": {
+      "findings": [
+        {
+          "category": "headers",
+          "rule_id": "spf_fail",
+          "severity": "high",
+          "confidence": 0.9,
+          "evidence": {
+            "spf_result": "fail",
+            "authentication_results": "mx.google.com; spf=fail smtp.mailfrom=paypa1-alerts.xyz; dkim=fail; dmarc=fail"
+          },
+          "reason": "SPF result: fail"
+        },
+        {
+          "category": "headers",
+          "rule_id": "dkim_fail",
+          "severity": "high",
+          "confidence": 0.9,
+          "evidence": {
+            "dkim_result": "fail",
+            "authentication_results": "mx.google.com; spf=fail smtp.mailfrom=paypa1-alerts.xyz; dkim=fail; dmarc=fail"
+          },
+          "reason": "DKIM result: fail"
+        },
+        {
+          "category": "headers",
+          "rule_id": "dmarc_fail",
+          "severity": "high",
+          "confidence": 0.9,
+          "evidence": {
+            "dmarc_result": "fail",
+            "authentication_results": "mx.google.com; spf=fail smtp.mailfrom=paypa1-alerts.xyz; dkim=fail; dmarc=fail"
+          },
+          "reason": "DMARC result: fail"
+        },
+        {
+          "category": "headers",
+          "rule_id": "reply_to_mismatch",
+          "severity": "medium",
+          "confidence": 0.75,
+          "evidence": {
+            "sender_domain": "paypa1-alerts.xyz",
+            "reply_to_domain": "collect-forms.ru",
+            "reply_to": "noreply@collect-forms.ru"
+          },
+          "reason": "Reply-To domain (collect-forms.ru) differs from sender domain (paypa1-alerts.xyz)"
+        },
+        {
+          "category": "headers",
+          "rule_id": "urgent_subject",
+          "severity": "medium",
+          "confidence": 0.65,
+          "evidence": { "subject": "URGENT: Your PayPal account has been limited" },
+          "reason": "Subject line uses urgency language: 'URGENT: Your PayPal account has been limited'"
+        },
+        {
+          "category": "sender",
+          "rule_id": "brand_impersonation",
+          "severity": "high",
+          "confidence": 0.9,
+          "evidence": {
+            "surface": "display_name",
+            "text": "PayPal Security",
+            "sender_domain": "paypa1-alerts.xyz",
+            "impersonated_brand": "paypal",
+            "role_keyword_present": true
+          },
+          "reason": "Display Name references 'paypal' but message is sent from 'paypa1-alerts.xyz'"
+        },
+        {
+          "category": "sender",
+          "rule_id": "lookalike_domain",
+          "severity": "high",
+          "confidence": 0.91,
+          "evidence": {
+            "sender_domain": "paypa1-alerts.xyz",
+            "similar_to": "paypal.com",
+            "similarity": 0.91
+          },
+          "reason": "Sender domain 'paypa1-alerts.xyz' closely resembles 'paypal.com' (91% similar)"
+        },
+        {
+          "category": "body",
+          "rule_id": "phishing_language",
+          "severity": "medium",
+          "confidence": 0.7,
+          "evidence": {
+            "matched_keywords": ["your account will be suspended", "verify now", "click the link below"]
+          },
+          "reason": "Body contains 3 phishing language indicator(s): your account will be suspended, verify now, click the link below"
+        },
+        {
+          "category": "body",
+          "rule_id": "login_link",
+          "severity": "medium",
+          "confidence": 0.65,
+          "evidence": {
+            "url": "http://paypa1-login.xyz/secure/verify?token=a1b2c3&session=true&next=dashboard"
+          },
+          "reason": "Body contains a link that resembles a credential or login page"
+        },
+        {
+          "category": "urls",
+          "rule_id": "punycode_domain",
+          "severity": "high",
+          "confidence": 0.9,
+          "evidence": {
+            "domain": "xn--pypal-4ve.com",
+            "url": "http://xn--pypal-4ve.com/secure"
+          },
+          "reason": "URL uses a punycode (internationalised) domain: xn--pypal-4ve.com"
+        },
+        {
+          "category": "urls",
+          "rule_id": "anchor_text_mismatch",
+          "severity": "high",
+          "confidence": 0.85,
+          "evidence": {
+            "displayed_url": "https://www.paypal.com/verify",
+            "actual_url": "http://paypa1-login.xyz/secure/verify"
+          },
+          "reason": "Link text shows 'paypal.com' but href points to 'paypa1-login.xyz'"
+        },
+        {
+          "category": "attachments",
+          "rule_id": "macro_indicator",
+          "severity": "high",
+          "confidence": 0.8,
+          "evidence": {
+            "filename": "PayPal_Statement_April2026.doc",
+            "extension": ".doc"
+          },
+          "reason": "Attachment 'PayPal_Statement_April2026.doc' uses a macro-capable Office format"
+        },
+        {
+          "category": "office",
+          "rule_id": "auto_open_action",
+          "severity": "critical",
+          "confidence": 0.88,
+          "evidence": { "filename": "PayPal_Statement_April2026.doc" },
+          "reason": "'PayPal_Statement_April2026.doc' has an Auto-Open/Document-Open macro trigger"
+        }
+      ],
+      "urls": [
+        {
+          "original_url": "http://paypa1-login.xyz/secure/verify?token=a1b2c3&session=true&next=dashboard",
+          "normalized_url": "http://paypa1-login.xyz/secure/verify?token=a1b2c3&session=true&next=dashboard",
+          "registered_domain": "paypa1-login.xyz",
+          "is_punycode": false,
+          "is_shortener": false,
+          "is_raw_ip": false,
+          "is_lookalike": true,
+          "anchor_text": "https://www.paypal.com/verify",
+          "anchor_text_mismatch": true
+        },
+        {
+          "original_url": "http://xn--pypal-4ve.com/secure",
+          "normalized_url": "http://xn--pypal-4ve.com/secure",
+          "registered_domain": "xn--pypal-4ve.com",
+          "is_punycode": true,
+          "is_lookalike": true
+        }
+      ],
+      "attachments": [
+        {
+          "filename": "PayPal_Statement_April2026.doc",
+          "sha256": "d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d4e5",
+          "mime_type": "application/msword",
+          "declared_mime": "application/msword",
+          "extension": ".doc",
+          "size_bytes": 87552,
+          "entropy": 6.82,
+          "is_archive": false,
+          "is_macro_doc": true,
+          "is_pdf": false,
+          "extension_mismatch": false,
+          "high_risk": true,
+          "has_macros": true,
+          "risk_flags": ["macro_capable_extension"]
+        }
+      ],
+      "static_score": 100,
+      "has_critical_rule": true,
+      "contains_login_link": true,
+      "contains_executable_or_macro_attachment": true
+    },
+    "sandbox_results": [],
+    "verdict": {
+      "message_id": "18e4a2f7b9c1d305",
+      "static_score": 100,
+      "dynamic_score": 0,
+      "final_score": 100,
+      "severity": "critical",
+      "confidence": 0.82,
+      "reasons": [
+        "SPF result: fail",
+        "DKIM result: fail",
+        "DMARC result: fail",
+        "Reply-To domain (collect-forms.ru) differs from sender domain (paypa1-alerts.xyz)",
+        "Subject line uses urgency language: 'URGENT: Your PayPal account has been limited'",
+        "Display Name references 'paypal' but message is sent from 'paypa1-alerts.xyz'",
+        "Sender domain 'paypa1-alerts.xyz' closely resembles 'paypal.com' (91% similar)",
+        "Body contains 3 phishing language indicator(s)",
+        "URL uses a punycode domain: xn--pypal-4ve.com",
+        "Link text shows 'paypal.com' but href points to 'paypa1-login.xyz'",
+        "'PayPal_Statement_April2026.doc' has an Auto-Open/Document-Open macro trigger"
+      ],
+      "recommended_action": "quarantine",
+      "created_ts": 1744372801.4
+    },
+    "policy": {
+      "action": "quarantine",
+      "message_id": "18e4a2f7b9c1d305",
+      "severity": "critical",
+      "label_applied": "MAILFORT/QUARANTINE",
+      "quarantined": true,
+      "notified": false,
+      "dry_run": false
+    }
+  },
+  {
+    "case_ts": 1744372845.0,
+    "message": {
+      "message_id": "18e4a31c2f8b9a07",
+      "thread_id": "18e4a31c2f8b9a07",
+      "provider": "imap",
+      "sender": "\"IT Helpdesk\" <it-support@company-it-support.net>",
+      "sender_domain": "company-it-support.net",
+      "subject": "Action Required: Reset your VPN credentials by EOD",
+      "date": "Fri, 11 Apr 2026 08:22:11 +0000",
+      "labels": [],
+      "body_sha256": "c5f2d3e4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2",
+      "html_sha256": "",
+      "attachment_count": 0
+    },
+    "static_analysis": {
+      "findings": [
+        {
+          "category": "headers",
+          "rule_id": "spf_fail",
+          "severity": "high",
+          "confidence": 0.9,
+          "evidence": { "spf_result": "fail" },
+          "reason": "SPF result: fail"
+        },
+        {
+          "category": "headers",
+          "rule_id": "dmarc_fail",
+          "severity": "high",
+          "confidence": 0.9,
+          "evidence": { "dmarc_result": "fail" },
+          "reason": "DMARC result: fail"
+        },
+        {
+          "category": "headers",
+          "rule_id": "urgent_subject",
+          "severity": "medium",
+          "confidence": 0.65,
+          "evidence": { "subject": "Action Required: Reset your VPN credentials by EOD" },
+          "reason": "Subject line uses urgency language: 'Action Required: Reset your VPN credentials by EOD'"
+        },
+        {
+          "category": "body",
+          "rule_id": "login_link",
+          "severity": "medium",
+          "confidence": 0.65,
+          "evidence": { "url": "https://company-vpn-login.net/reset?uid=emp7749" },
+          "reason": "Body contains a link that resembles a credential or login page"
+        },
+        {
+          "category": "urls",
+          "rule_id": "suspicious_tld",
+          "severity": "medium",
+          "confidence": 0.65,
+          "evidence": { "tld": ".net", "url": "https://company-vpn-login.net/reset" },
+          "reason": "Sending domain registered recently on a commonly-abused TLD"
+        }
+      ],
+      "urls": [
+        {
+          "original_url": "https://company-vpn-login.net/reset?uid=emp7749",
+          "registered_domain": "company-vpn-login.net",
+          "is_raw_ip": false,
+          "is_shortener": false,
+          "anchor_text_mismatch": false
+        }
+      ],
+      "attachments": [],
+      "static_score": 62,
+      "has_critical_rule": false,
+      "contains_login_link": true,
+      "contains_executable_or_macro_attachment": false
+    },
+    "sandbox_results": [],
+    "verdict": {
+      "message_id": "18e4a31c2f8b9a07",
+      "static_score": 62,
+      "dynamic_score": 0,
+      "final_score": 62,
+      "severity": "high",
+      "confidence": 0.75,
+      "reasons": [
+        "SPF result: fail",
+        "DMARC result: fail",
+        "Subject line uses urgency language",
+        "Body contains a link resembling a credential page"
+      ],
+      "recommended_action": "quarantine",
+      "created_ts": 1744372846.1
+    },
+    "policy": {
+      "action": "quarantine",
+      "message_id": "18e4a31c2f8b9a07",
+      "severity": "high",
+      "label_applied": "MAILFORT/QUARANTINE",
+      "quarantined": true,
+      "dry_run": false
+    }
+  },
+  {
+    "case_ts": 1744372891.0,
+    "message": {
+      "message_id": "18e4a3b7d1c2e408",
+      "thread_id": "18e4a3b7d1c2e408",
+      "provider": "gmail",
+      "sender": "\"Alice Chen\" <alice.chen@partner-corp.com>",
+      "sender_domain": "partner-corp.com",
+      "subject": "Q2 planning doc",
+      "date": "Fri, 11 Apr 2026 09:01:55 +0000",
+      "labels": ["INBOX"],
+      "body_sha256": "e6f3d4a5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3",
+      "html_sha256": "",
+      "attachment_count": 1
+    },
+    "static_analysis": {
+      "findings": [],
+      "urls": [],
+      "attachments": [
+        {
+          "filename": "Q2_Planning_v3.xlsx",
+          "sha256": "f7a4e5b6c7d8e9f0a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6e7f8a9b0c1d2e3f4",
+          "mime_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "declared_mime": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+          "extension": ".xlsx",
+          "size_bytes": 42188,
+          "entropy": 7.21,
+          "is_archive": false,
+          "is_macro_doc": false,
+          "is_pdf": false,
+          "extension_mismatch": false,
+          "high_risk": false,
+          "risk_flags": []
+        }
+      ],
+      "static_score": 0,
+      "has_critical_rule": false,
+      "contains_login_link": false,
+      "contains_executable_or_macro_attachment": false
+    },
+    "sandbox_results": [],
+    "verdict": {
+      "message_id": "18e4a3b7d1c2e408",
+      "static_score": 0,
+      "dynamic_score": 0,
+      "final_score": 0,
+      "severity": "benign",
+      "confidence": 0.0,
+      "reasons": [],
+      "recommended_action": "allow",
+      "created_ts": 1744372892.3
+    },
+    "policy": {
+      "action": "allow",
+      "message_id": "18e4a3b7d1c2e408",
+      "severity": "benign",
+      "quarantined": false,
+      "dry_run": false
+    }
   }
 ]

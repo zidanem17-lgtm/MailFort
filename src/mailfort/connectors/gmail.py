@@ -131,6 +131,26 @@ class GmailConnector:
             .execute()
         )
 
+    def fetch_attachment_bytes(
+        self, message_id: str, attachment_id: str
+    ) -> Optional[bytes]:
+        """Fetch a large attachment by ID and return its raw bytes.
+
+        This is the callable signature expected by the message normalizer's
+        *attachment_fetcher* parameter, enabling full analysis of attachments
+        that are too large to be inlined in the message payload.
+        """
+        import base64
+        try:
+            resp = self.get_attachment(message_id, attachment_id)
+            data_b64 = resp.get("data", "")
+            if not data_b64:
+                return None
+            padded = data_b64 + "=" * (-len(data_b64) % 4)
+            return base64.urlsafe_b64decode(padded)
+        except Exception:
+            return None
+
     # ------------------------------------------------------------------
     # Label modification
     # ------------------------------------------------------------------

@@ -524,7 +524,12 @@ def _message_iterator(provider, connector, label_ids, query, max_messages):
             max_messages=max_messages,
         ):
             raw = connector.get_message(stub["id"])
-            yield normalize_gmail_message(raw)
+            # Pass the attachment fetcher so large attachments referenced
+            # only by attachmentId are retrieved and fully analysed.
+            yield normalize_gmail_message(
+                raw,
+                attachment_fetcher=connector.fetch_attachment_bytes,
+            )
 
     elif provider == PROVIDER_IMAP:
         search = query or "ALL"
