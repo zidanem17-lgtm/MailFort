@@ -1,0 +1,41 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+*.egg
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# MailFort runtime data
+*.db
+*.db-wal
+*.db-shm
+~/.mailfort/
+
+# OAuth tokens — never commit credentials
+credentials.json
+*.json.bak
+tokens.json
+.mailfort_tokens.json
+
+# Reports output
+reports/
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
