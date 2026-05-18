@@ -1,5 +1,7 @@
 # MailFort
 
+![MailFort Logo](MailFort_Logo.jpeg)
+
 **Read-only-first email triage and mitigation engine with explainable scoring and controlled remediation.**
 
 MailFort inspects your mailbox before you ever open a suspicious message. Every finding is explained, every score is traceable, and every remediation action requires explicit approval — unless you configure the policy engine to act automatically.
@@ -120,6 +122,24 @@ baseline    Show sender-domain statistics from scan history
 ```
 
 Run `python -m mailfort.cli <command> --help` for all flags.
+
+---
+
+## Testing and CI
+
+```bash
+pip install -r requirements.txt
+PYTHONPATH=src python -m compileall -q src
+PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+GitHub Actions now runs the same checks on push and pull requests:
+- syntax compile check
+- CLI smoke check (`python -m mailfort.cli --help`)
+- unit test suite (Python 3.11 and 3.12)
+
+Optional live provider integrations are available via manual workflow dispatch
+(`run_live_integrations=true`) with repository secrets configured.
 
 ---
 

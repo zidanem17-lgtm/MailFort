@@ -1,0 +1,80 @@
+name: CI
+
+on:
+  push:
+    branches:
+      - "**"
+  pull_request:
+  workflow_dispatch:
+    inputs:
+      run_live_integrations:
+        description: "Run live Gmail/IMAP integration tests (requires repository secrets)"
+        required: false
+        default: false
+        type: boolean
+
+permissions:
+  contents: read
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["3.11", "3.12"]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Syntax check
+        run: python -m compileall -q src
+
+      - name: CLI smoke check
+        run: PYTHONPATH=src python -m mailfort.cli --help
+
+      - name: Run unit tests
+        run: PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
+
+  live-provider-integrations:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_live_integrations == true }}
+    needs: tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run live provider integration tests
+        env:
+          MAILFORT_LIVE_GMAIL: ${{ secrets.MAILFORT_LIVE_GMAIL }}
+          MAILFORT_GMAIL_CREDENTIALS_PATH: ${{ secrets.MAILFORT_GMAIL_CREDENTIALS_PATH }}
+          MAILFORT_GMAIL_TOKEN_PATH: ${{ secrets.MAILFORT_GMAIL_TOKEN_PATH }}
+          MAILFORT_LIVE_IMAP: ${{ secrets.MAILFORT_LIVE_IMAP }}
+          MAILFORT_IMAP_HOST: ${{ secrets.MAILFORT_IMAP_HOST }}
+          MAILFORT_IMAP_PORT: ${{ secrets.MAILFORT_IMAP_PORT }}
+          MAILFORT_IMAP_USERNAME: ${{ secrets.MAILFORT_IMAP_USERNAME }}
+          MAILFORT_IMAP_PASSWORD: ${{ secrets.MAILFORT_IMAP_PASSWORD }}
+          MAILFORT_IMAP_MAILBOX: ${{ secrets.MAILFORT_IMAP_MAILBOX }}
+        run: PYTHONPATH=src python -m unittest tests.integration.test_live_providers -v
