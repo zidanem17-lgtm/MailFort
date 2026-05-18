@@ -159,6 +159,29 @@ DETONATE_THRESHOLD = 40   # was 50
 
 ---
 
+## 7. Deployment readiness checklist (Gmail / IMAP auth)
+
+Run these checks before production rollout:
+
+- [ ] Install dependencies with `pip install -r requirements.txt`
+- [ ] Run baseline checks:
+  - `PYTHONPATH=src python -m compileall -q src`
+  - `PYTHONPATH=src python -m mailfort.cli --help`
+  - `PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v`
+- [ ] Validate Gmail auth path:
+  - Ensure OAuth client JSON exists (`credentials.json` or `--credentials`)
+  - Run `python -m mailfort.cli scan --provider gmail --mode phishfinder --max 1`
+- [ ] Validate IMAP auth path:
+  - Confirm host, username, password/app-password, and mailbox
+  - Run `python -m mailfort.cli scan --provider imap --imap-host <host> --username <user> --password '<password>' --mode phishfinder --max 1`
+- [ ] Run MailFort mode in `--dry-run` before enabling live quarantine actions
+- [ ] Enable CI status checks and require passing `CI` workflow before deploy
+
+Optional live integration tests can be run locally or in GitHub Actions using:
+- `PYTHONPATH=src python -m unittest tests.integration.test_live_providers -v`
+
+---
+
 ## Flags reference
 
 ```

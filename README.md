@@ -125,6 +125,24 @@ Run `python -m mailfort.cli <command> --help` for all flags.
 
 ---
 
+## Testing and CI
+
+```bash
+pip install -r requirements.txt
+PYTHONPATH=src python -m compileall -q src
+PYTHONPATH=src python -m unittest discover -s tests -p "test_*.py" -v
+```
+
+GitHub Actions now runs the same checks on push and pull requests:
+- syntax compile check
+- CLI smoke check (`python -m mailfort.cli --help`)
+- unit test suite (Python 3.11 and 3.12)
+
+Optional live provider integrations are available via manual workflow dispatch
+(`run_live_integrations=true`) with repository secrets configured.
+
+---
+
 ## Architecture
 
 ```
