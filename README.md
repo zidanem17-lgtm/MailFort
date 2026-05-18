@@ -1,5 +1,7 @@
 # MailFort
 
+![MailFort Logo](MailFort_Logo.jpeg)
+
 **Read-only-first email triage and mitigation engine with explainable scoring and controlled remediation.**
 
 MailFort inspects your mailbox before you ever open a suspicious message. Every finding is explained, every score is traceable, and every remediation action requires explicit approval — unless you configure the policy engine to act automatically.
